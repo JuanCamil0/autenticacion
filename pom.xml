@@ -17,6 +17,7 @@
     <module>infrastructure/driven-adapters/r2dbc-postgresql</module>
     <module>infrastructure/entry-points/reactive-web</module>
     <module>applications/app-service</module>
+    <module>jacoco-report</module>
   </modules>
 
   <properties>
@@ -29,6 +30,10 @@
     <jakarta.validation.version>3.0.2</jakarta.validation.version>
     <hibernate.validator.version>8.0.0.Final</hibernate.validator.version>
     <lombok.version>1.18.30</lombok.version>
+    <springdoc.version>2.2.0</springdoc.version>
+    <junit.version>5.10.1</junit.version>
+    <mockito.version>5.8.0</mockito.version>
+    <jacoco.version>0.8.11</jacoco.version>
   </properties>
 
   <dependencyManagement>
@@ -82,6 +87,35 @@
         <version>${lombok.version}</version>
         <scope>provided</scope>
       </dependency>
+      
+      <!-- SpringDoc OpenAPI WebFlux -->
+      <dependency>
+        <groupId>org.springdoc</groupId>
+        <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+        <version>${springdoc.version}</version>
+      </dependency>
+      
+      <!-- JUnit 5 -->
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      
+      <!-- Mockito -->
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-junit-jupiter</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   
@@ -109,7 +143,50 @@
             </annotationProcessorPaths>
           </configuration>
         </plugin>
+        
+        <!-- Surefire Plugin for JUnit 5 -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.2.2</version>
+        </plugin>
+        
+        <!-- JaCoCo Plugin -->
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco.version}</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>report</id>
+              <phase>test</phase>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>report-aggregate</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>report-aggregate</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
+    
+    <plugins>
+      <!-- JaCoCo Plugin -->
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
   </build>
 </project>
